@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+
+	// For now one route to respond to json payload
+	// Overtime this will get more complex and be able to send requests to other services
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		render(w, "test.page.gohtml")
 	})
