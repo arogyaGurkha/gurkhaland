@@ -8,6 +8,7 @@
                 <hr>
                 <a id="brokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Broker</a>
                 <a id="authBrokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Auth</a>
+                <a id="logBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Logger</a>
                 <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
                     <span class="text-muted">Output shows here...</span>
                 </div>
@@ -34,6 +35,7 @@
     <script>
         let brokerBtn = document.getElementById("brokerBtn")
         let authBrokerBtn = document.getElementById("authBrokerBtn")
+        let logBtn = document.getElementById("logBtn")
 
         let outputSection = document.getElementById("output")
         let payloadSection = document.getElementById("payload")
@@ -57,6 +59,18 @@
                 })
         })
 
+        logBtn.addEventListener("click", () => {
+            const payload = {
+                action: "log",
+                auth: {
+                    name: "event",
+                    data: "Some kind of data"
+                }
+            };
+
+            fetchData(payload, handleResponse, handleError);
+        });
+
         authBrokerBtn.addEventListener("click", () => {
             const payload = {
                 action: "auth",
@@ -64,29 +78,44 @@
                     email: "admin@example.com",
                     password: "verysecret"
                 }
-            }
+            };
 
+            fetchData(payload, handleResponse, handleError);
+        });
+
+        function fetchData(payload, onSuccess, onError) {
             const headers = new Headers();
-            headers.append("Content-Type", "application/json")
+            headers.append("Content-Type", "application/json");
+
             const body = {
                 method: "POST",
                 body: JSON.stringify(payload),
                 headers: headers
-            }
+            };
 
             fetch("http://localhost:8080/handle", body)
                 .then((response) => response.json())
                 .then((data) => {
-                    payloadSection.innerHTML = JSON.stringify(payload, undefined, 4);
-                    receiveSection.innerHTML = JSON.stringify(data, undefined, 4)
-                    if (data.error) outputSection.innerHTML += `<br><strong>Error:</strong> ${data.message}`
-                    else outputSection.innerHTML += `<br><strong>Response from broker service</strong>: ${data.message}`
+                    onSuccess(payload, data);
                 })
                 .catch((error) => {
-                    outputSection.innerHTML += `<br><br>Error: ${error}`
-                })
-        })
+                    onError(error);
+                });
+        }
 
+        function handleResponse(payload, data) {
+            payloadSection.innerHTML = JSON.stringify(payload, undefined, 4);
+            receiveSection.innerHTML = JSON.stringify(data, undefined, 4);
+            if (data.error) {
+                outputSection.innerHTML += `<br><strong>Error:</strong> ${data.message}`;
+            } else {
+                outputSection.innerHTML += `<br><strong>Response from broker service</strong>: ${data.message}`;
+            }
+        }
+
+        function handleError(error) {
+            outputSection.innerHTML += `<br><br>Error: ${error}`;
+        }
 
     </script>
 {{end}}
