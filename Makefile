@@ -1,5 +1,6 @@
 FRONT_END_BINARY=frontApp
 BROKER_SERVICE_BINARY=brokerApp
+LOGGER_SERVICE_BINARY=loggerApp
 AUTH_SERVICE_BINARY=authApp
 
 ## up: starts all containers in the background without forcing build
@@ -26,6 +27,12 @@ down:
 build_broker_service:
 	@echo "Building broker service binary..."
 	cd broker-service && env GOOS=linux CGO_ENABLED=0 go build -o ./bin/${BROKER_SERVICE_BINARY} ./cmd/api
+	@echo "Done!"
+
+## build_logger_service: builds the logger service binary as a linux executable
+build_logger_service:
+	@echo "Building logger service binary..."
+	cd logger-service && env GOOS=linux CGO_ENABLED=0 go build -o ./bin/${LOGGER_SERVICE_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_auth_service: builds the auth service binary as a linux executable
