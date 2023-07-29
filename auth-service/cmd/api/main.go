@@ -36,6 +36,10 @@ func main() {
 		Models: data.New(conn),
 	}
 
+	app.serve()
+}
+
+func (app *Config) serve() {
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
