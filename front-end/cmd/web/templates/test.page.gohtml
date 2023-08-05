@@ -9,6 +9,7 @@
                 <a id="brokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Broker</a>
                 <a id="authBrokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Auth</a>
                 <a id="logBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Logger</a>
+                <a id="mailBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Mail</a>
                 <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
                     <span class="text-muted">Output shows here...</span>
                 </div>
@@ -36,6 +37,7 @@
         let brokerBtn = document.getElementById("brokerBtn")
         let authBrokerBtn = document.getElementById("authBrokerBtn")
         let logBtn = document.getElementById("logBtn")
+        let mailBtn = document.getElementById("mailBtn")
 
         let outputSection = document.getElementById("output")
         let payloadSection = document.getElementById("payload")
@@ -82,6 +84,20 @@
 
             fetchData(payload, handleResponse, handleError);
         });
+
+        mailBtn.addEventListener("click", () => {
+            const payload = {
+                action: "mail",
+                mail: {
+                    from: "me@example.com",
+                    to: "you@there.com",
+                    subject: "Test Email",
+                    message: "Hello World!",
+                }
+            };
+
+            fetchData(payload, handleResponse, handleError);
+        })
 
         function fetchData(payload, onSuccess, onError) {
             const headers = new Headers();
