@@ -7,7 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"net"
 	"net/http"
+	"net/rpc"
 	"time"
 )
 
@@ -46,7 +48,14 @@ func main() {
 		Models: data.New(client),
 	}
 
-	log.Println("Starting service on port: ", webPort)
+	// register RPC server
+	err = rpc.Register(new(RPCServer))
+	if err != nil {
+		log.Panic(err)
+	}
+	app.rpcListen()
+
+	log.Println("Starting service on port:", webPort)
 	app.serve()
 }
 
@@ -63,9 +72,26 @@ func (app *Config) serve() {
 	}
 }
 
+func (app *Config) rpcListen() error {
+	log.Println("Starting RPC server on port:", rpcPort)
+	listen, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", rpcPort))
+	if err != nil {
+		return err
+	}
+	defer listen.Close()
+
+	for {
+		rpcConn, err := listen.Accept()
+		if err != nil {
+			continue
+		}
+		go rpc.ServeConn(rpcConn)
+	}
+}
+
 func connectToMongo() (*mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(mongoURL)
-	clientOptions.SetAuth(options.Credential{
+	clientOptions.SetAuth(options.Credential{ // TODO: hardcoded mongo credential
 		Username: "admin",
 		Password: "password",
 	})

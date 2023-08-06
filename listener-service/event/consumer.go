@@ -57,7 +57,7 @@ func (consumer *Consumer) Listen(topics []string) error {
 		err := ch.QueueBind(
 			q.Name,
 			s,
-			"logs_topic",
+			"logs_topic", // TODO: remove hardcoded exchange name
 			false,
 			nil,
 		)
@@ -71,7 +71,7 @@ func (consumer *Consumer) Listen(topics []string) error {
 		return err
 	}
 
-	forever := make(chan bool)
+	forever := make(chan bool) // unbuffered channel
 	go func() {
 		for d := range messages {
 			var payload Payload
@@ -82,7 +82,7 @@ func (consumer *Consumer) Listen(topics []string) error {
 	}()
 
 	fmt.Printf("Waiting for message on [Exchange, Queue] [logs_topic, %s]\n", q.Name)
-	<-forever
+	<-forever // blocks the main program from exiting, waiting indefinitely for messages to arrive
 
 	return nil
 }
