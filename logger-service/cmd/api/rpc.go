@@ -16,9 +16,8 @@ type RPCPayload struct {
 
 // LogInfo logs RPCPayload information to MongoDB collection, sets resp string pointer to success message
 func (r *RPCServer) LogInfo(payload RPCPayload, resp *string) error {
-	log.Println(payload)
 	collection := client.Database("logs").Collection("logs") // TODO: hardcoded DB name
-	_, err := collection.InsertOne(context.TODO(), data.LogEntry{
+	result, err := collection.InsertOne(context.TODO(), data.LogEntry{
 		Name:      payload.Name,
 		Data:      payload.Data,
 		CreatedAt: time.Now(),
@@ -27,6 +26,7 @@ func (r *RPCServer) LogInfo(payload RPCPayload, resp *string) error {
 		log.Println("error writing to mongo with RPC", err)
 		return err
 	}
+	log.Println("Logged item", result)
 
 	*resp = "Processed payload via RPC:" + payload.Name
 

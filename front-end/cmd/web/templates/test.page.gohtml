@@ -10,6 +10,7 @@
                 <a id="authBrokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Auth</a>
                 <a id="logBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Logger</a>
                 <a id="mailBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Mail</a>
+                <a id="logGBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test gRPC Log</a>
                 <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
                     <span class="text-muted">Output shows here...</span>
                 </div>
@@ -38,6 +39,7 @@
         let authBrokerBtn = document.getElementById("authBrokerBtn")
         let logBtn = document.getElementById("logBtn")
         let mailBtn = document.getElementById("mailBtn")
+        let logGBtn = document.getElementById("logGBtn")
 
         let outputSection = document.getElementById("output")
         let payloadSection = document.getElementById("payload")
@@ -70,7 +72,19 @@
                 }
             };
 
-            fetchData(payload, handleResponse, handleError);
+            fetchData(payload, "handle", handleResponse, handleError);
+        });
+
+        logGBtn.addEventListener("click", () => {
+            const payload = {
+                action: "log",
+                log: {
+                    name: "event",
+                    data: "Some kind of gRPC data"
+                }
+            };
+
+            fetchData(payload, "log-grpc", handleResponse, handleError);
         });
 
         authBrokerBtn.addEventListener("click", () => {
@@ -82,7 +96,7 @@
                 }
             };
 
-            fetchData(payload, handleResponse, handleError);
+            fetchData(payload, "handle", handleResponse, handleError);
         });
 
         mailBtn.addEventListener("click", () => {
@@ -96,10 +110,10 @@
                 }
             };
 
-            fetchData(payload, handleResponse, handleError);
+            fetchData(payload, "handle", handleResponse, handleError);
         })
 
-        function fetchData(payload, onSuccess, onError) {
+        function fetchData(payload, fetchEnd, onSuccess, onError) { // TODO: find a more elegant solution for endpoints
             const headers = new Headers();
             headers.append("Content-Type", "application/json");
 
@@ -109,7 +123,7 @@
                 headers: headers
             };
 
-            fetch("http://localhost:8080/handle", body)
+            fetch("http://localhost:8080/" + fetchEnd, body)
                 .then((response) => response.json())
                 .then((data) => {
                     onSuccess(payload, data);

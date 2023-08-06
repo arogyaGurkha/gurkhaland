@@ -53,7 +53,8 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	app.rpcListen()
+	go app.rpcListen()
+	go app.gRPCListener()
 
 	log.Println("Starting service on port:", webPort)
 	app.serve()
