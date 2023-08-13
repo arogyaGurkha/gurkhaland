@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package mail;
+
+option go_package = "/mail";
+
+message Mail {
+  string from = 1;
+  string to = 2;
+  string subject = 3;
+  string message = 4;
+}
+
+message MailRequest {
+  Mail mailReq = 1;
+}
+
+message MailResponse {
+  string result = 1;
+}
+
+service MailService {
+  rpc SendMail(MailRequest) returns (MailResponse);
+}
