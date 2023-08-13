@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/arogyaGurkha/gurkhaland/auth-service/data"
+	"github.com/arogyaGurkha/gurkhaland/auth-service/proto/auth"
+	"google.golang.org/grpc"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"time"
@@ -14,7 +17,10 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
-const webPort = "80"
+const (
+	webPort  = "80"
+	gRpcPort = "50001"
+)
 
 var retryCounts int64
 
@@ -24,7 +30,7 @@ type Config struct {
 }
 
 func main() {
-	log.Printf("Starting authentication service \n")
+	log.Println("Starting Postgres connection")
 
 	conn := connectToDB()
 	if conn == nil {
@@ -36,6 +42,7 @@ func main() {
 		Models: data.New(conn),
 	}
 
+	go app.gRPCListener()
 	app.serve()
 }
 
@@ -44,6 +51,7 @@ func (app *Config) serve() {
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
+	log.Println("Starting authentication service on port", webPort)
 
 	err := srv.ListenAndServe()
 	if err != nil {
@@ -86,5 +94,22 @@ func connectToDB() *sql.DB {
 		log.Printf("Backing off...\n")
 		time.Sleep(3 * time.Second)
 		continue
+	}
+}
+
+func (app *Config) gRPCListener() {
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", gRpcPort)) // TODO: hardcoded tcp port
+	if err != nil {
+		log.Fatalf("Failed to listen for gRPC: %v", err)
+	}
+
+	s := grpc.NewServer()
+
+	auth.RegisterAuthServiceServer(s, &AuthServer{Models: app.Models}) // TODO: Simplify GRPC Server call
+
+	log.Printf("gRPC server started on port %v", gRpcPort)
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to listen for gRPC: %v", err)
 	}
 }

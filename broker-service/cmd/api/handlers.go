@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/arogyaGurkha/gurkhaland/broker-service/event"
+	"github.com/arogyaGurkha/gurkhaland/broker-service/proto/auth"
 	logs "github.com/arogyaGurkha/gurkhaland/broker-service/proto/logs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -285,6 +286,51 @@ func (app *Config) logItemViaGRPC(w http.ResponseWriter, r *http.Request) {
 	payload := jsonResponse{
 		Error:   false,
 		Message: "logged with gRPC",
+	}
+
+	app.writeJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *Config) authenticateViaGRPC(w http.ResponseWriter, r *http.Request) {
+	var requestPayload RequestPayload
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	conn, err := grpc.Dial("auth-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	defer conn.Close()
+
+	c := auth.NewAuthServiceClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	response, err := c.Authenticate(ctx, &auth.AuthRequest{
+		AuthReq: &auth.Auth{
+			Email:    requestPayload.Auth.Email,
+			Password: requestPayload.Auth.Password,
+		},
+	})
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	if response.Result != "success" {
+		app.errorJSON(w, errors.New("error authenticating")) // TODO: error message too vague
+		return
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "Authenticated",
+		Data:    response.Data,
 	}
 
 	app.writeJSON(w, http.StatusAccepted, payload)
