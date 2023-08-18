@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/arogyaGurkha/gurkhaland-proto/logger-service/logs"
 	"github.com/arogyaGurkha/gurkhaland/broker-service/event"
 	"github.com/arogyaGurkha/gurkhaland/broker-service/proto/auth"
-	logs "github.com/arogyaGurkha/gurkhaland/broker-service/proto/logs"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net/http"

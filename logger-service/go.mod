@@ -3,9 +3,11 @@ module github.com/arogyaGurkha/gurkhaland/logger-service
 go 1.20
 
 require (
+	github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818063500-ab675c66077b
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
 	go.mongodb.org/mongo-driver v1.12.0
+	google.golang.org/grpc v1.57.0
 )
 
 require (
@@ -23,6 +25,5 @@ require (
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230525234030-28d5490b6b19 // indirect
-	google.golang.org/grpc v1.57.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 )

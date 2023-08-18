@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/arogyaGurkha/gurkhaland-proto/logger-service/logs"
 	"github.com/arogyaGurkha/gurkhaland/logger-service/data"
-	logs "github.com/arogyaGurkha/gurkhaland/logger-service/proto/logs"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -30,7 +30,7 @@ func (l *LogServer) WriteLog(ctx context.Context, req *logs.LogRequest) (*logs.L
 		return res, err
 	}
 
-	// return response
+	// return responsez
 	res := &logs.LogResponse{Result: "logged"}
 	return res, nil
 }
