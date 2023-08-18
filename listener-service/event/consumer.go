@@ -2,11 +2,16 @@ package event
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/arogyaGurkha/gurkhaland-proto/logger-service/logs"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Consumer struct {
@@ -90,13 +95,13 @@ func (consumer *Consumer) Listen(topics []string) error {
 func handlePayload(payload Payload) {
 	switch payload.Name {
 	case "log", "event":
-		err := logEvent(payload)
+		err := logEventViaGRPC(payload)
 		if err != nil {
 			log.Println(err)
 		}
 	case "auth":
 	default:
-		err := logEvent(payload)
+		err := logEventViaGRPC(payload)
 		if err != nil {
 			log.Println(err)
 		}
@@ -123,6 +128,30 @@ func logEvent(entry Payload) error {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusAccepted {
+		return err
+	}
+
+	return nil
+}
+
+func logEventViaGRPC(entry Payload) error {
+	conn, err := grpc.Dial("logger-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	c := logs.NewLogServiceClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	_, err = c.WriteLog(ctx, &logs.LogRequest{
+		LogEntry: &logs.Log{
+			Name: entry.Name,
+			Data: entry.Data,
+		},
+	})
+	if err != nil {
 		return err
 	}
 
