@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/arogyaGurkha/gurkhaland/mail-service/proto/mail"
+	"google.golang.org/grpc"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strconv"
@@ -12,7 +15,10 @@ type Config struct {
 	Mailer Mail
 }
 
-const webPort = "80"
+const (
+	webPort  = "80"
+	gRPCPort = "50001"
+)
 
 func main() {
 	app := Config{
@@ -20,6 +26,7 @@ func main() {
 	}
 
 	log.Println("Starting mail service on port: ", webPort)
+	go app.gRPCListener()
 	app.serve()
 }
 
@@ -49,4 +56,20 @@ func createMail() Mail {
 	}
 
 	return m
+}
+
+func (app *Config) gRPCListener() {
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", gRPCPort)) // TODO: hardcoded tcp port
+	if err != nil {
+		log.Fatalf("Failed to listen for gRPC: %v", err)
+	}
+
+	s := grpc.NewServer()
+
+	mail.RegisterMailServiceServer(s, &MailServer{Mailer: app.Mailer})
+	log.Printf("gRPC server started on port %v", gRPCPort)
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to listen for gRPC: %v", err)
+	}
 }

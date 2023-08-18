@@ -9,6 +9,7 @@ import (
 	"github.com/arogyaGurkha/gurkhaland-proto/auth-service/auth"
 	"github.com/arogyaGurkha/gurkhaland-proto/logger-service/logs"
 	"github.com/arogyaGurkha/gurkhaland/broker-service/event"
+	"github.com/arogyaGurkha/gurkhaland/broker-service/proto/mail"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
@@ -331,6 +332,48 @@ func (app *Config) authenticateViaGRPC(w http.ResponseWriter, r *http.Request) {
 		Error:   false,
 		Message: "Authenticated",
 		Data:    response.Data,
+	}
+
+	app.writeJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *Config) sendMailViaGRPC(w http.ResponseWriter, r *http.Request) {
+	var requestPayload RequestPayload
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	conn, err := grpc.Dial("mail-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	defer conn.Close()
+
+	c := mail.NewMailServiceClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := c.SendMail(ctx, &mail.MailRequest{
+		MailReq: &mail.Mail{
+			From:    requestPayload.Mail.From,
+			To:      requestPayload.Mail.To,
+			Subject: requestPayload.Mail.Subject,
+			Message: requestPayload.Mail.Message,
+		},
+	})
+
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: res.Result,
 	}
 
 	app.writeJSON(w, http.StatusAccepted, payload)
