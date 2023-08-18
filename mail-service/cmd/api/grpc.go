@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/arogyaGurkha/gurkhaland/mail-service/proto/mail"
+	"github.com/arogyaGurkha/gurkhaland-proto/mail-service/mail"
 	"log"
 )
 

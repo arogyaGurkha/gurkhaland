@@ -2,6 +2,8 @@ github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-4470
 github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-44701dc66c93/go.mod h1:YhvQlXh4MQqT5h8JblIOG1zOsIAwQXx6IgRLwTVPcyQ=
 github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818063500-ab675c66077b h1:ocBkIaG/Z7IO3hX/bie9cpH98fARZMGuebRxi41ZIkU=
 github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818063500-ab675c66077b/go.mod h1:mfH3lmdydViP0LqDeDT12xBdz0AM70jJpg5z8+wFyOE=
+github.com/arogyaGurkha/gurkhaland-proto/mail-service v0.0.0-20230818072117-5db41e155737 h1:v/fpMZEhUIz4H+JSiAYd3jauCj45h1mgqj0Pq5wVais=
+github.com/arogyaGurkha/gurkhaland-proto/mail-service v0.0.0-20230818072117-5db41e155737/go.mod h1:TyNhQRx03YVrbTL8J9IOML+iJfnljBBAAEwNL302+Es=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-chi/chi/v5 v5.0.8 h1:lD+NLqFcAi1ovnVZpsnObHGW4xb4J8lNmoYVfECH1Y0=

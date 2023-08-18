@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.1.0 // indirect
+	github.com/arogyaGurkha/gurkhaland-proto/mail-service v0.0.0-20230818072117-5db41e155737 // indirect
 	github.com/go-chi/chi/v5 v5.0.10 // indirect
 	github.com/go-chi/cors v1.2.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect

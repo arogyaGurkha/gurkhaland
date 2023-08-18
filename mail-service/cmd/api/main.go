@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/arogyaGurkha/gurkhaland/mail-service/proto/mail"
+	"github.com/arogyaGurkha/gurkhaland-proto/mail-service/mail"
 	"google.golang.org/grpc"
 	"log"
 	"net"
