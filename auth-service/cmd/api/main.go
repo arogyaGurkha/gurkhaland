@@ -3,8 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/arogyaGurkha/gurkhaland-proto/auth-service/auth"
 	"github.com/arogyaGurkha/gurkhaland/auth-service/data"
-	"github.com/arogyaGurkha/gurkhaland/auth-service/proto/auth"
 	"google.golang.org/grpc"
 	"log"
 	"net"

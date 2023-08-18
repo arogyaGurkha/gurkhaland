@@ -3,6 +3,7 @@ module github.com/arogyaGurkha/gurkhaland/broker-service
 go 1.20
 
 require (
+	github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-44701dc66c93
 	github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818063500-ab675c66077b
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
