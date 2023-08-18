@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-44701dc66c93
+	github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818072117-5db41e155737
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
 	github.com/jackc/pgconn v1.14.0

@@ -3,6 +3,8 @@ github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030I
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-44701dc66c93 h1:mNPdWN9uBgWLsxOdR4Sd1PRfLD7cjl/yeQCAsbyCIWE=
 github.com/arogyaGurkha/gurkhaland-proto/auth-service v0.0.0-20230818064544-44701dc66c93/go.mod h1:YhvQlXh4MQqT5h8JblIOG1zOsIAwQXx6IgRLwTVPcyQ=
+github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818072117-5db41e155737 h1:zE7CN8ckwYURYmVzdgbyY5YG1LvG2y559USCsREIwtc=
+github.com/arogyaGurkha/gurkhaland-proto/logger-service v0.0.0-20230818072117-5db41e155737/go.mod h1:mfH3lmdydViP0LqDeDT12xBdz0AM70jJpg5z8+wFyOE=
 github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I=
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
