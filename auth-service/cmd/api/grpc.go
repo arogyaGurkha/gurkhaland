@@ -42,6 +42,8 @@ func (a *AuthServer) Authenticate(ctx context.Context, req *auth.AuthRequest) (*
 		return res, err
 	}
 
+	// TODO: Send mail to mail system if login fails.
+
 	user := &auth.User{
 		Id:        int32(u.ID), // TODO: change proto file to not do this
 		Email:     u.Email,

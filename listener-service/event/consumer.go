@@ -5,13 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"time"
+
 	"github.com/arogyaGurkha/gurkhaland-proto/logger-service/logs"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
-	"net/http"
-	"time"
 )
 
 type Consumer struct {
@@ -99,6 +100,7 @@ func handlePayload(payload Payload) {
 		if err != nil {
 			log.Println(err)
 		}
+	// TODO: Add handling from auth requests.
 	case "auth":
 	default:
 		err := logEventViaGRPC(payload)
